@@ -1,0 +1,10 @@
+[Unit]
+Description=BoneServerbyAnna server
+
+[Service]
+Environment=NODE_PATH=/usr/lib/node_modules
+ExecStart=/home/root/exercises/realtime/boneServer.js
+SyslogIdentifier=boneserver
+
+[Install]
+WantedBy=multi-user.target
