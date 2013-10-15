@@ -1,0 +1,65 @@
+gpio: pin 53 (gpio 53) value is 1
+mmc_send_cmd : timeout: No status update
+Card did not respond to voltage select!
+mmc0(part 0) is current device
+mmc_send_cmd : timeout: No status update
+Card did not respond to voltage select!
+No micro SD card found, setting mmcdev to 1
+mmc_send_cmd : timeout: No status update
+mmc1(part 0) is current device
+mmc_send_cmd : timeout: No status update
+gpio: pin 54 (gpio 54) value is 1
+SD/MMC found on device 1
+reading uEnv.txt
+26 bytes read in 4 ms (5.9 KiB/s)
+Loaded environment from uEnv.txt
+Importing environment from mmc ...
+gpio: pin 55 (gpio 55) value is 1
+4270840 bytes read in 741 ms (5.5 MiB/s)
+gpio: pin 56 (gpio 56) value is 1
+24129 bytes read in 43 ms (547.9 KiB/s)
+Booting from mmc ...
+## Booting kernel from Legacy Image at 80007fc0 ...
+   Image Name:   Angstrom/3.8.13/beaglebone
+   Image Type:   ARM Linux Kernel Image (uncompressed)
+   Data Size:    4270776 Bytes = 4.1 MiB
+   Load Address: 80008000
+   Entry Point:  80008000
+Verifying Checksum ... OK
+## Flattened Device Tree blob at 80f80000
+   Booting using the fdt blob at 0x80f80000
+   XIP Kernel Image ... OK
+OK
+   Using Device Tree in place at 80f80000, end 80f88e40
+
+Starting kernel ...
+
+Uncompressing Linux... done, booting the kernel.
+[    0.193432] omap2_mbox_probe: platform not supported
+[    0.204021] tps65217-bl tps65217-bl: no platform data provided
+[    0.280638] bone-capemgr bone_capemgr.8: slot #0: No cape found
+[    0.317744] bone-capemgr bone_capemgr.8: slot #1: No cape found
+[    0.354850] bone-capemgr bone_capemgr.8: slot #2: No cape found
+[    0.391961] bone-capemgr bone_capemgr.8: slot #3: No cape found
+[    0.411990] bone-capemgr bone_capemgr.8: slot #6: BB-BONELT-HDMIN conflict P8.45 (#5:BB-BONELT-HDMI)
+[    0.421609] bone-capemgr bone_capemgr.8: slot #6: Failed verification
+[    0.428387] bone-capemgr bone_capemgr.8: loader: failed to load slot-6 BB-BONELT-HDMIN:00A0 (prio 2)
+[    0.451026] omap_hsmmc mmc.4: of_parse_phandle_with_args of 'reset' failed
+[    0.515486] pinctrl-single 44e10800.pinmux: pin 44e10854 already requested by
+ 44e10800.pinmux; cannot claim for gpio-leds.7
+[    0.527229] pinctrl-single 44e10800.pinmux: pin-21 (gpio-leds.7) status -22
+[    0.534540] pinctrl-single 44e10800.pinmux: could not request pin 21 on device pinctrl-single
+[    9.380873] systemd-udevd[86]: worker [147] terminated by signal 11 (Segmentation fault)
+[    9.425358] systemd-udevd[86]: worker [147] failed while handling '/devices/ocp.2/47400000.usb/musb-hdrc.0.auto/gadget/net/usb0'
+
+.---O---.
+|       |                  .-.           o o
+|   |   |-----.-----.-----.| |   .----..-----.-----.
+|       |     | __  |  ---'| '--.|  .-'|     |     |
+|   |   |  |  |     |---  ||  --'|  |  |  '  | | | |
+'---'---'--'--'--.  |-----''----''--'  '-----'-'-'-'
+                -'  |
+                '---'
+
+The Angstrom Distribution beaglebone ttyO0
+
