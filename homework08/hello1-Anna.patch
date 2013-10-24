@@ -1,0 +1,181 @@
+From da36e3632547b8a62752d61a95abf9be313aa9b8 Mon Sep 17 00:00:00 2001
+From: yuxuan <zengyuxuan083@gmail.com>
+Date: Thu, 24 Oct 2013 09:29:33 -0700
+Subject: [PATCH 1/3] Files for hello1 kernel module
+
+---
+ drivers/char/Kconfig           |    8 ++++++++
+ drivers/char/Makefile          |    1 +
+ drivers/char/examples/Makefile |    6 ++++++
+ drivers/char/examples/hello1.c |   21 +++++++++++++++++++++
+ 4 files changed, 36 insertions(+)
+ create mode 100644 drivers/char/examples/Makefile
+ create mode 100644 drivers/char/examples/hello1.c
+
+diff --git a/drivers/char/Kconfig b/drivers/char/Kconfig
+index 72bedad..fcf09a2 100644
+--- a/drivers/char/Kconfig
++++ b/drivers/char/Kconfig
+@@ -603,6 +603,14 @@ config TILE_SROM
+ 	  in /dev/srom/.  The Tilera hypervisor makes the flash
+ 	  device appear much like a simple EEPROM, and knows
+ 	  how to partition a single ROM for multiple purposes.
++# added by Yuxuan Zeng, 10/24/2013
++source "drivers/char/examples/Kconfig"
++
++config EXAMPLES
++	tristate "Examples for hw08, ECE 497"
++	default m
++	help
++	  This is an example for hw08, ECE 497, by Yuxuan Zeng.
+ 
+ endmenu
+ 
+diff --git a/drivers/char/Makefile b/drivers/char/Makefile
+index 7ff1d0d..391ec5a 100644
+--- a/drivers/char/Makefile
++++ b/drivers/char/Makefile
+@@ -52,6 +52,7 @@ obj-$(CONFIG_TELCLOCK)		+= tlclk.o
+ obj-$(CONFIG_MWAVE)		+= mwave/
+ obj-$(CONFIG_AGP)		+= agp/
+ obj-$(CONFIG_PCMCIA)		+= pcmcia/
++obj-$(CONFIG_EXAMPLES)          += examples/
+ 
+ obj-$(CONFIG_HANGCHECK_TIMER)	+= hangcheck-timer.o
+ obj-$(CONFIG_TCG_TPM)		+= tpm/
+diff --git a/drivers/char/examples/Makefile b/drivers/char/examples/Makefile
+new file mode 100644
+index 0000000..5104e40
+--- /dev/null
++++ b/drivers/char/examples/Makefile
+@@ -0,0 +1,6 @@
++
++
++obj-$(CONFIG_EXAMPLES)	+= hello1.o
++# obj-$(CONFIG_EXAMPLES)	+= hello2.o
++# obj-$(CONFIG_EXAMPLES)	+= hello3.o
++
+diff --git a/drivers/char/examples/hello1.c b/drivers/char/examples/hello1.c
+new file mode 100644
+index 0000000..3c9f631
+--- /dev/null
++++ b/drivers/char/examples/hello1.c
+@@ -0,0 +1,21 @@
++/* Example Minimal Character Device Driver */
++#include <linux/module.h>
++
++static int __init hello_init(void)
++{
++    printk(KERN_INFO "Hello Example Init\n");
++
++    return 0;
++}
++
++static void __exit hello_exit(void)
++{
++    printk(KERN_INFO "Hello Example Exit\n");
++}
++
++module_init(hello_init);
++module_exit(hello_exit);
++
++MODULE_AUTHOR("Yuxuan Zeng");
++MODULE_DESCRIPTION("Hello World Example");
++MODULE_LICENSE("GPL");
+-- 
+1.7.9.5
+
+
+From c3e96fbd6f6f51266eb34a1a5c2b8d5a24ee5eb7 Mon Sep 17 00:00:00 2001
+From: yuxuan <zengyuxuan083@gmail.com>
+Date: Thu, 24 Oct 2013 09:52:47 -0700
+Subject: [PATCH 2/3] modified for hello1
+
+---
+ drivers/char/Kconfig |   15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/char/Kconfig b/drivers/char/Kconfig
+index fcf09a2..7c33d40 100644
+--- a/drivers/char/Kconfig
++++ b/drivers/char/Kconfig
+@@ -4,6 +4,13 @@
+ 
+ menu "Character devices"
+ 
++# added by Yuxuan Zeng, 10/24/2013
++config EXAMPLES
++	tristate "Examples for hw08, ECE 497"
++	default m
++	help
++	  This is an example for hw08, ECE 497, by Yuxuan Zeng.
++
+ source "drivers/tty/Kconfig"
+ 
+ config DEVKMEM
+@@ -603,14 +610,6 @@ config TILE_SROM
+ 	  in /dev/srom/.  The Tilera hypervisor makes the flash
+ 	  device appear much like a simple EEPROM, and knows
+ 	  how to partition a single ROM for multiple purposes.
+-# added by Yuxuan Zeng, 10/24/2013
+-source "drivers/char/examples/Kconfig"
+-
+-config EXAMPLES
+-	tristate "Examples for hw08, ECE 497"
+-	default m
+-	help
+-	  This is an example for hw08, ECE 497, by Yuxuan Zeng.
+ 
+ endmenu
+ 
+-- 
+1.7.9.5
+
+
+From 19ca312aa66d5b1245391c6fc54f88916be8e3fe Mon Sep 17 00:00:00 2001
+From: yuxuan <zengyuxuan083@gmail.com>
+Date: Thu, 24 Oct 2013 11:09:52 -0700
+Subject: [PATCH 3/3] modified to take 2 paras
+
+---
+ drivers/char/examples/hello1.c |   18 +++++++++++++-----
+ 1 file changed, 13 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/char/examples/hello1.c b/drivers/char/examples/hello1.c
+index 3c9f631..e9c736a 100644
+--- a/drivers/char/examples/hello1.c
++++ b/drivers/char/examples/hello1.c
+@@ -1,10 +1,18 @@
+ /* Example Minimal Character Device Driver */
++// From page 211 of Embedded Linux Primer by Christopher Hallinan
+ #include <linux/module.h>
+ 
+-static int __init hello_init(void)
+-{
+-    printk(KERN_INFO "Hello Example Init\n");
++static int debug_enable = 0;
++static int run_level    = 0;
++module_param(debug_enable, int, 0);
++module_param(run_level, int, 0);
++MODULE_PARM_DESC(debug_enable, "Enable module debug mode.");
++MODULE_PARM_DESC(run_level, "Run on super/ordinary level.");
+ 
++static int __init hello_init(void) {
++    /* Now print value of new module parameter */
++    printk("Hello Example Init - debug mode is %s - run on %s level\n",
++           debug_enable ? "enabled" : "disabled", run_level ? "super" : "ordinary");
+     return 0;
+ }
+ 
+@@ -16,6 +24,6 @@ static void __exit hello_exit(void)
+ module_init(hello_init);
+ module_exit(hello_exit);
+ 
+-MODULE_AUTHOR("Yuxuan Zeng");
+-MODULE_DESCRIPTION("Hello World Example");
++MODULE_AUTHOR("Chris Hallinan, entered by Mark A. Yoder");
++MODULE_DESCRIPTION("Hello World Example with parameter");
+ MODULE_LICENSE("GPL");
+-- 
+1.7.9.5
+
