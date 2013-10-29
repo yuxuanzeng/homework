@@ -1,0 +1,15 @@
+#Created by Yuxuan Zeng, for hw09, ECE 497, RHIT
+1 connect() in matrixLED
+In the first connection between client(running matrixLED.js) and server(running boneServer.js), the matrixLED.js will call connect(), in which matrixLED.js emits a 'matrix' event to boneServer.js along with the i2cNum(the i2c table on which the LED matrix wired to, can be modified on browser). 
+Upon receiving this event, boneServer.js reads all the values of regisistors on devices and sends it to matrixLED.js.
+But matrixLED.js(calling matrix()) only stores half of those values and ignores those values of red LEDs. Then matrixLED.js updates the display of the LED matrix diagram on browser. Thus, the status of the LED matrix device has been updated on browser on the LED matrix diagram.
+2 When LED is clicked on in the browser
+Upon an LED is clicked, the LEDclick(i,j) is called to handle the event. 
+First LEDclick(i,j) will change the value of this LED, in this case, LED is clicked on. Then LEDclick() will emit an 'i2cset' event with necessary parameters(i2c talbe, line number, and the value of the line)to boneServer.js, telling it a LED has been toggled. Then boneServer.js will turn on the LED matrix device wired to BBB.
+Then LEDclick() will update the display of LED matrix on browser.
+3 What entry in matrix.css is used to color the LED?
+It's the 'on' entry.
+4 How I control the two LEDS
+Actually, the values of red and green LEDS can be modified seperately since they are stored in different digits. 
+Upon receiving digits of red and green LEDS, store them all and determine the status(green, red, green+red or off) of every bit in the LED matrix. When a bit is toggled, I decide whether red or green LED of the bit to be toggled according to the current status(green, red, green+red or off) of the bit, making the bit flashing red, orange, green, off and then red again while being toggled continuously.
+
