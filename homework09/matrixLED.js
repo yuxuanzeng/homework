@@ -124,6 +124,10 @@ function LEDclick(i, j) {
 	    
         }
         //        status_update("disp: " + disp);
+        for (i=0;i<8;i++)
+	{
+		console.log("disp[%d] = %x, disp[%d] = %x",i,disp[i],i+8, disp[i+8]);
+	}
         // i cycles through each column
         for (i = 0; i < 8; i ++) {
             // j cycles through each bit
@@ -137,7 +141,7 @@ function LEDclick(i, j) {
 		    //$('#id' + i + '_' + j).removeClass('cred');
 		    //$('#id' + i + '_' + j).removeClass('cgreen');
                     $('#id' + i + '_' + j).addClass('corange');
-		    click[i/2][j] = 2;
+		    click[i][j] = 2;
 		} else if ((((disp[i] >> j) | 0x0) === 0)&&(((disp[i+8] >> j) & 0x1)===1)) {
 		    //$('#id' + i + '_' + j).removeClass('corange');
 		    //$('#id' + i + '_' + j).removeClass('cgreen');
@@ -145,9 +149,9 @@ function LEDclick(i, j) {
 		    click[i][j] = 1;
 		} else
 		{
-                   // $('#id' + i + '_' + j).removeClass('cred');
-		   // $('#id' + i + '_' + j).removeClass('corange');
-		   // $('#id' + i + '_' + j).removeClass('cgreen');
+                    $('#id' + i + '_' + j).removeClass('cred');
+		    $('#id' + i + '_' + j).removeClass('corange');
+		    $('#id' + i + '_' + j).removeClass('cgreen');
 		    //$('#id' + i + '_' + j).addClass('cnone');
 		    click[i][j] = 0;
                 }
